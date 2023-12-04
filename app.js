@@ -292,7 +292,7 @@ app.post('/forgot-password', (req, res) => {
           if (err) throw err;
   
      
-        const resetLink = `http://localhost:${PORT}/reset/${token}`;
+        const resetLink = `https://lostdarkunlocks.onrender.com/reset/${token}`;
 
           transporter.sendMail({
             to: username,
@@ -530,8 +530,8 @@ app.post('/paypal', ensureAuthenticated, (req, res) => {
             payment_method: 'paypal'
         },
         redirect_urls: {
-            return_url: 'http://localhost:3000/payment_success',
-            cancel_url: 'http://localhost:3000//payment_error'
+            return_url: 'https://lostdarkunlocks.onrender.com/payment_success',
+            cancel_url: 'https://lostdarkunlocks.onrender.com//payment_error'
         },
         transactions: [{
             item_list: {
