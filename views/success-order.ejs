@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <title>Success Order</title>
+</head>
+<body>
+   
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <!-- Add a success message with an icon -->
+            <div class="alert alert-success text-center" role="alert">
+                <h4 class="alert-heading"><i class="fas fa-check-circle"></i> Order  <%= newOrderId %> Was Successfully Placed</h4>
+                <p>Your order was successfully placed. <a href="/view-orders"> View Order Status</a>
+                   
+                </p>
+            </div>
+            
+            <!-- Display additional payment details -->
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Order Details</h5>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><strong>Order id:</strong> 
+                            <%= newOrderId %> </li>
+                        <li class="list-group-item"><strong>Imei:</strong> <%= newOrder.imei %></li>
+                      <li class="list-group-item"><strong>Model:</strong>  <%= newOrder.model %> </li>
+                        
+                        <li class="list-group-item"><strong>phoneNumber:</strong>  <%= newOrder.phoneNumber %> </li>
+                        <li class="list-group-item">
+                            <strong>SMS Status:</strong>
+                            <% if (newOrder.status === true) { %>
+                                <span class="delivered">Delivered</span>
+                            <% } else { %>
+                                <span class="failed">Failed</span>
+                            <% } %>
+                        </li>
+                        
+                         <li class="list-group-item"><strong>Date:</strong>  <%= newOrder.date %> </li>
+                                            
+                    </ul>
+                </div>
+            </div>
+            <!-- Add a button to return to the homepage or a relevant page -->
+            <div class="text-center mt-4">
+                <a href="/order" class="btn btn-primary">Place a new order</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+</body>
+</html>

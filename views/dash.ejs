@@ -1,0 +1,121 @@
+<%- include('partials/header') %>
+
+
+        <!-- ======================= Cards ================== -->
+        <div class="cardBox">
+            <div class="card">
+                <div>
+                    <div class="numbers">0</div>
+                    <div class="cardName">Visit</div>
+                </div>
+
+                <div class="iconBx">
+                    <ion-icon name="eye-outline"></ion-icon>
+                </div>
+            </div>
+
+            <div class="card">
+                <div>
+                    <div class="numbers"><%= totalOrders %></div>
+                    <div class="cardName">Orders</div>
+                </div>
+
+                <div class="iconBx">
+                    <ion-icon name="cart-outline"></ion-icon>
+                </div>
+            </div>
+
+            <div class="card">
+                <div>
+                    <div class="numbers"><%- user.sms %></div>
+                    <div class="cardName">SMS</div>
+                </div>
+
+                <div class="iconBx">
+                    <ion-icon name="chatbubbles-outline"></ion-icon>
+                </div>
+            </div>
+
+            <div class="card">
+                <div>
+                    <div class="numbers">$<%= user.balance %></div>
+                    <div class="cardName">Credits</div>
+                </div>
+
+                <div class="iconBx">
+                    <ion-icon name="cash-outline"></ion-icon>
+                </div>
+            </div>
+        </div>
+
+        <% if (welcomeMessage) { %>
+            <div class="success-message">
+            <span class="icon">
+                <!-- Font Awesome check icon -->
+                <i class="fas fa-check-circle"></i>
+            </span>
+            <%= welcomeMessage %>
+            </div>
+        <% } %>
+
+        <% if (successMessage) { %>
+            <div class="success-message">
+              <span class="icon">
+                <!-- Font Awesome check icon -->
+                <i class="fas fa-check-circle"></i>
+              </span>
+              <%= successMessage %>
+            </div>
+          <% } %>
+          
+        <!-- ================ Order Details List ================= -->
+        <div class="details">
+            <div class="recentOrders">
+                <div class="cardHeader">
+                    <h2>Recent Orders</h2>
+                    <a href="/view-orders" class="btn">View All</a>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <td>Order ID</td>
+                            <td>Model</td>
+                            <td>IMEI</td>
+                            <td>Phone Number</td>
+                            <td>SMS Status </td>
+                            
+                            <td>Date</td>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <% user.orders.slice().reverse().forEach(order => { %>
+                          <tr>
+                            <td><%= order.orderID %></td> 
+                            <td><%= order.model %></td>
+                            <td><%= order.imei %></td>
+                            <td><%= order.phoneNumber %></td>
+                            <% if (order.status === true) { %>
+                              <td class="delivered">Delivered</td>
+                            <% } else { %>
+                              <td class="return">Failed</td>
+                            <% } %>
+                            
+
+                            <td><%= order.date %></td>
+                          </tr>
+                        <% }); %>
+                      </tbody>
+                      
+                </table>
+            </div>
+
+            <!-- ================= New Customers ================ -->
+           
+        </div>
+    </div>
+</div>
+
+
+<%- include('partials/footer') %>

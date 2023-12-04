@@ -1,0 +1,35 @@
+{
+  "name": "lost-panel-script",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@vonage/server-sdk": "^3.10.0",
+    "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.2",
+    "connect-flash": "^0.1.1",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.3.1",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "install": "^0.13.0",
+    "mongoose": "^6.10.0",
+    "nexmo": "^2.9.1",
+    "node-fetch": "^3.3.2",
+    "nodemailer": "^6.9.7",
+    "npm": "^10.2.4",
+    "passport": "^0.6.0",
+    "passport-local": "^1.0.0",
+    "passport-local-mongoose": "^8.0.0",
+    "paypal-rest-sdk": "^1.8.1",
+    "sinch": "^0.4.0",
+    "stripe": "^14.7.0",
+    "twilio": "^4.19.0"
+  }
+}

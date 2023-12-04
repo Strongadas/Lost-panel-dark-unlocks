@@ -1,0 +1,150 @@
+<%- include('partials/header') %>
+
+<center>
+
+<div class="containera">
+    <div id="paymentForm">
+        <div class="title">
+            <h2>Buy Credits</h2>
+        </div>
+    <br>
+        <div class="title">
+            <h4>Select a <span style="color: #6064b6">Payment</span> method</h4>
+        </div>
+        
+
+        <form action="error" method="post">
+            <label for="amount">Min Amount $:</label>
+             <input type="text" class="form-control" id="amount" name="amount" value="30">
+             <br> <br>
+             <p id="error" style="color: red; display: none;"> The Minimum deposit is $30</p>
+
+            <input type="radio" name="payment" id="visa" class="radio">
+            <input type="radio" name="payment" id="mastercard" class="radio">
+            <input type="radio" name="payment" id="paypal" class="radio">
+            <input type="radio" name="payment" id="AMEX" class="radio">
+            
+            <div class="category">
+                <label for="visa" class="visaMethod">
+                    <div class="imgName">
+                        <div class="imgContainer visa">
+                            <img src="/images/visa.png" alt="">
+                        </div>
+                        <span class="name">Credit / Debit Card</span>
+                    </div>
+                    <span class="check"><i class="fa-solid fa-circle-check" style="color: #6064b6;"></i></span>
+                </label>
+                <label for="mastercard" class="mastercardMethod">
+                    <div class="imgName">
+                        <div class="imgContainer mastercard">
+                            <img src="/images/skrill.png" alt="">
+                        </div>
+                        <span class="name">Skrill</span>
+                    </div>
+                    <span class="check"><i class="fa-solid fa-circle-check" style="color: #6064b6;"></i></span>
+                </label>
+
+                <label for="paypal" class="paypalMethod">
+                    <div class="imgName">
+                        <div class="imgContainer paypal">
+                            <img src="https://i.ibb.co/KVF3mr1/paypal.png" alt="">
+                        </div>
+                        <span class="name">Paypal</span>
+                    </div>
+                    <span class="check"><i class="fa-solid fa-circle-check" style="color: #6064b6;"></i></span>
+                </label>
+
+                <label for="AMEX" class="amexMethod">
+                    <div class="imgName">
+                        <div class="imgContainer AMEX">
+                            <img src="/images/btc.png" alt="">
+                        </div>
+                        <span class="name">BitCoin</span>
+                    </div>
+                    <span class="check"><i class="fa-solid fa-circle-check" style="color: #6064b6;"></i></span>
+                </label>
+            </div>
+            <!-- Additional payment form fields can be added here -->
+            <br>
+            <p class="text-danger" style="display: none;" id="errorPay">Please Choose a Payment Method</p>
+            <button type="submit" class="btn btn-primary" onclick="checkAmount(event)">Pay Now</button>
+        </form>
+    </div>
+</div>
+</center>
+
+<script>
+    const paymentForm = document.getElementById('paymentForm');
+           const amountInput = document.getElementById('amount');
+           const form = paymentForm.querySelector('form');
+           
+
+    function checkAmount(event) {
+    
+    
+    var enteredAmount = parseFloat(document.getElementById('amount').value);
+    var errorElement = document.getElementById('error');
+
+    if (enteredAmount < 30) {
+         
+      errorElement.style.display = 'block';
+      event.preventDefault();
+
+    } else {
+      errorElement.style.display = 'none';
+      // Perform further actions if the amount is valid
+      document.getElementById('amountForm').submit(); // Manually submit the form if needed
+    }
+  }
+           
+   const paymentMethodRadios = document.querySelectorAll('input[type=radio][name=payment]');
+           paymentMethodRadios.forEach(radio => {
+       radio.addEventListener('change', (e) => {
+           const selectedPaymentMethod = radio.id;
+           console.log(selectedPaymentMethod)
+   
+           switch (selectedPaymentMethod) {
+               case 'paypal':
+                   form.action = '/paypal';
+                   
+                   break;
+               case 'visa':
+                   form.action = '/visa';
+                   form.method="Post"
+                   break;
+               case 'mastercard':
+                   form.action = '/mastercard';
+                   break;
+               case 'AMEX':
+                   form.action = '/AMEX';
+                   break;
+               default:
+                     errorPay.style.display = "block";
+                     
+           }
+       });
+   });
+   </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<%- include('partials/footer') %>

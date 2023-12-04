@@ -1,0 +1,44 @@
+
+<%- include('partials/header') %>
+
+
+<div class="details">
+    <div class="recentOrders">
+<table>
+    <thead>
+        <tr>
+            <td>Order ID</td>
+            <td>Model</td>
+            <td>IMEI</td>
+            <td>Phone Number</td>
+            <td>SMS Status </td>
+            
+            <td>Date</td>
+        </tr>
+    </thead>
+
+    <tbody>
+      <% user.orders.slice().reverse().forEach(order => { %>
+        <tr>
+          <td><%= order.orderID %></td> 
+          <td><%= order.model %></td>
+          <td><%= order.imei %></td>
+          <td><%= order.phoneNumber %></td>
+          <% if (order.status === true) { %>
+            <td class="delivered">Delivered</td>
+          <% } else { %>
+            <td class="return">Failed</td>
+          <% } %>
+         
+          <td><%= order.date %></td>
+        </tr>
+      <% }); %>
+    </tbody>
+    
+</table>
+</div>
+</div>
+</div>
+
+
+<%- include('partials/footer') %>
